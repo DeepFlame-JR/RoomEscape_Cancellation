@@ -6,6 +6,9 @@ __pycache__/
 # init file
 *.ini
 
+# node modules
+node_modules/
+
 # C extensions
 *.so
 
