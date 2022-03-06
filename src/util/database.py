@@ -2,12 +2,16 @@ import sys, os
 sys.path.append((os.path.dirname(__file__)))
 import common
 import psycopg2
+import configparser as parser
 
 # Postgre SQL DB 클래스 정의
 class PostgreSQL:
     def __init__(self, name):
         try:
-            self.db = psycopg2.connect(host='localhost', dbname=name, user='postgres', password='postgres')
+            properties = parser.ConfigParser()
+            properties.read('../config.ini')
+            info = properties['POSTGRES']
+            self.db = psycopg2.connect(host='localhost', dbname=name, user=info['user'], password=info['pw'])
             self.db.set_client_encoding('utf-8')
             self.cursor = self.db.cursor()
         except:

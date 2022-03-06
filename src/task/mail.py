@@ -1,13 +1,17 @@
 import sys, os
 import time
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from util import common
+from util import common, database
 import configparser as parser
 
 import smtplib
 from email.mime.text import MIMEText
 
-def SendMail():
+def SendMail(slot_dict):
+    for theme, slots in slot_dict:
+        a = 1
+    counter = common.TimeCounter("Send Mails")
+
     properties = parser.ConfigParser()
     properties.read('../config.ini')
     logon_info = properties['MAIL']
@@ -21,14 +25,19 @@ def SendMail():
     #         prev_slot.append(cur)
     # if len(send_content) == 0: return
 
-    # s = smtplib.SMTP('smtp.gmail.com', 587)
-    # s.starttls()
-    # s.login(logon_info['id'], logon_info['pw'])
-    #
-    # msg = MIMEText('test')
-    # msg['Subject'] = 'Tempo Rubato 빈자리 알림'
-    #
-    # s.sendmail("roomEscape@noreply.com", "wnsfuf0121@naver.com", msg.as_string())
-    # s.quit()
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login(logon_info['id'], logon_info['pw'])
 
-SendMail()
+    msg = MIMEText('test')
+    msg['Subject'] = 'Tempo Rubato 빈자리 알림'
+
+    server.sendmail(
+        "roomEscape@gmail.com",
+        "wnsfuf0121@naver.com",
+        msg.as_string()
+    )
+
+    server.quit()
+    counter.end()

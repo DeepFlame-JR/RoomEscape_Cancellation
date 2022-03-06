@@ -1,4 +1,7 @@
-from task import decoder
+from task import decoder,mail
 
 if __name__ == '__main__':
-    decoder.Tempo_Rubato()
+    total_slots = dict()
+    total_slots["Tempo Rubato"] = decoder.Tempo_Rubato()
+
+    mail.SendMail(total_slots)
