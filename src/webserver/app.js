@@ -1,15 +1,19 @@
+console.log('Server-side code running');
+
 const express = require("express");
+var path = require("path");
 
 const app = express();
-
 const port = 3001;
 
-app.set("port", port);
+app.use(express.static(__dirname + '/public'));
 
-app.get("/", (req, res) => {
-  res.send("Hello world!");
+app.listen(port, () => {
+  console.log("Listening on", port)
 });
 
-app.listen(port, () => console.log("Listening on", port));
+app.get('/', (req, res) => {
+  res.sendFile('public/index.html');
+});
 
-module.exports = app;
+// module.exports = app;
