@@ -38,9 +38,38 @@ app.get('/', (req, res) => {
   res.sendFile('public/index.html');
 });
 
+// register
 app.post('/clicked', function(req, res){
-  var user = new User(req.body);
-  user.save()
-      .then(() => console.log("user information is added"))
-      .catch((err) => console.log(err));
+  User
+  .find(req.body)
+  .then(output =>{
+    if(output.length > 0)
+      return res.status(404).json();
+
+    var user = new User(req.body);
+    user.save()
+        .then(() => console.log("register 완료"))
+    res.status(200).json();
+  })
+  .catch(err => {
+    res.status(500).json();
+  });
+});
+
+// delete
+app.post('/deleted', function(req, res){
+  User
+  .find(req.body)
+  .then(output =>{
+    console.log(output.length);
+    if(output.length == 0)
+      return res.status(404).json();
+
+    User.find(req.body).remove().exec();
+    console.log("Delete 완료");
+    res.status(200).json();
+  })
+  .catch(err => {
+    res.status(500).json();
+  });
 });
