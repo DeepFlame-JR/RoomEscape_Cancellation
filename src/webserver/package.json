@@ -1,6 +1,11 @@
 {
   "dependencies": {
+    "body-parser": "^1.19.2",
     "express": "^4.17.3",
-    "nodemon": "^2.0.15"
+    "iniparser": "^1.0.5",
+    "mongodb": "^4.4.1",
+    "mongoose": "^6.2.4",
+    "nodemon": "^2.0.15",
+    "sf": "^0.2.0"
   }
 }
