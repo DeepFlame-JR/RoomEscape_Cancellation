@@ -55,7 +55,7 @@ registerButton.addEventListener('click', function(e) {
       if(res.ok){
         alert('등록이 완료되었습니다!');
       }
-      else{
+      else if(res.status == 404){
         alert("이미 등록된 유저 정보가 있습니다.\n알림받을 최근 개월 수를 변경했습니다.");
       }
     })
@@ -81,7 +81,7 @@ deleteButton.addEventListener('click', function(e) {
       .then(function(res){
         if(res.ok){
           alert('제거되었습니다.');
-        }else{
+        }else if(res.status == 404){
           alert('등록된 정보가 없습니다.');
         }
       })
