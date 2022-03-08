@@ -18,6 +18,7 @@ def Tempo_Rubato():
     try:
         counter = common.TimeCounter("Tempo Rubato")
 
+
         if 'Windows' in platform.platform():
             options = webdriver.ChromeOptions()
             driver = Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
@@ -26,7 +27,7 @@ def Tempo_Rubato():
             options.add_argument('--headless')
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
-            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+            driver = Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
 
         available_slots = []
         url = 'http://decoder.kr/?page_id=7082'

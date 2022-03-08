@@ -7,20 +7,51 @@
   </head>
   <body>
     <div>
-      <h2>방탈출 빈 자리 알림 받기</h2>
-      <label>이메일을 입력해주세요.</label>
-      <input type="text" id="email">
+      <h1>방탈출 빈 자리 알림 받기</h1>
       <br>
-
-      <label>테마를 선택해주세요.</label>
-      <select name="items1" id="theme">
-        <option value="Decoder | Tempo Rubato">Decoder | Tempo Rubato</option>
-      </select>
-      <br>
-      <button id="registerButton">등록</button>
-      <button id="deleteButton">제거</button>
+      <table>
+        <tr>
+          <td>이메일을 입력해주세요.</td>
+          <td class="right">
+            <input type="text" id="email">
+          </td>
+        </tr>
+        <tr>
+          <td>테마를 선택해주세요.</td>
+          <td class="right">
+            <select id="theme">
+              <option value="Decoder | Tempo Rubato">Decoder | Tempo Rubato</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>최근 몇 개월의 취소 자리에 대해 알림 받겠습니까?</td>
+          <td class="right">
+            <select id="untilMonth">
+              <option value=1>1 개월</option>
+              <option value=2>2 개월</option>
+              <option value=3>3 개월</option>
+              <option value=4>4 개월</option>
+              <option value=5>5 개월</option>
+              <option value=6>6 개월</option>
+              <option value=7>7 개월</option>
+              <option value=8>8 개월</option>
+              <option value=9>9 개월</option>
+              <option value=10>10 개월</option>
+              <option value=11>11 개월</option>
+              <option value=12>12 개월</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td style="text-align:right; line-height:400%;">
+            <button id="registerButton">등록</button>
+            <button id="deleteButton">제거</button>
+          </td>
+        </tr>
+      </table>
     </div>
-
     <script type="text/javascript" src="client.js"></script>
   </body>
 

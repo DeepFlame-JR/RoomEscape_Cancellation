@@ -1,9 +1,13 @@
-h2 {
+h1 {
    color:blue;
 }
 
 div{
-    line-height: 300%;
+    line-height: 250%;
     font-size: 12px;
     font-family: 맑은고딕;
+}
+
+.right{
+  text-align:right;
 }

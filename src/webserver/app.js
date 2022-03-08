@@ -1,6 +1,9 @@
 console.log('Server-side code running');
 
 // require packages
+var util= require('util');
+const utf8Encoder = new util.TextEncoder();
+const utf8Decoder = new util.TextDecoder("utf-8", { ignoreBOM: true });
 const express = require("express");
 const path = require("path");
 const sf = require("sf");
@@ -20,6 +23,7 @@ const UserSchema = new mongoose.Schema({
   email: String,
   cafe: String,
   theme: String,
+  untilMonth: Number,
 }, {collection:'user'});
 const User = mongoose.model("User", UserSchema);
 
@@ -39,17 +43,25 @@ app.get('/', (req, res) => {
 });
 
 // register
-app.post('/clicked', function(req, res){
+app.post('/register', function(req, res){
+  console.log("registered start");
+  var checkUser = JSON.parse(JSON.stringify(req.body));
+  delete checkUser['untilMonth'];
+
   User
-  .find(req.body)
+  .findOne(checkUser)
   .then(output =>{
-    if(output.length > 0)
+    if(output){
+      User.updateOne(output, {untilMonth: req.body.untilMonth})
+          .then(() => console.log("update 완료"));
       return res.status(404).json();
+    }
 
     var user = new User(req.body);
-    user.save()
-        .then(() => console.log("register 완료"))
-    res.status(200).json();
+    user.save().then(() => {
+      console.log("register 완료")
+      return res.status(200).json();
+    });
   })
   .catch(err => {
     res.status(500).json();
@@ -57,17 +69,21 @@ app.post('/clicked', function(req, res){
 });
 
 // delete
-app.post('/deleted', function(req, res){
+app.post('/delete', function(req, res){
+  console.log("delete start");
+  var checkUser = JSON.parse(JSON.stringify(req.body));
+  delete checkUser['untilMonth'];
+
   User
-  .find(req.body)
+  .findOne(checkUser)
   .then(output =>{
-    console.log(output.length);
-    if(output.length == 0)
+    if(!output)
       return res.status(404).json();
 
-    User.find(req.body).remove().exec();
-    console.log("Delete 완료");
-    res.status(200).json();
+    User.deleteOne(output).then(()=>{
+      console.log("Delete 완료")
+      res.status(200).json();
+    });
   })
   .catch(err => {
     res.status(500).json();
