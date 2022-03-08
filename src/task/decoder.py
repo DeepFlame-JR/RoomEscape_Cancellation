@@ -18,24 +18,20 @@ def Tempo_Rubato():
     try:
         counter = common.TimeCounter("Tempo Rubato")
 
-
-        if 'Windows' in platform.platform():
-            options = webdriver.ChromeOptions()
-            driver = Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
-        else:
-            options = webdriver.ChromeOptions()
+        options = webdriver.ChromeOptions()
+        if 'Windows' not in platform.platform():
             options.add_argument('--headless')
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
-            driver = Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
+        driver = Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
 
         available_slots = []
         url = 'http://decoder.kr/?page_id=7082'
         driver.get(url)
 
         form_id = driver.find_element(By.CLASS_NAME, 'ab-booking-form').get_attribute('data-form_id')
-        # 최근 6개월
-        for i in range(6) :
+        # 최근 12개월
+        for i in range(12) :
             if i == 0:
                 re_url = 'http://decoder.kr/wp-admin/admin-ajax.php?action=ab_render_time&form_id=%s&cart_key=0' \
                          % form_id
@@ -57,11 +53,12 @@ def Tempo_Rubato():
                 soup = BeautifulSoup(day, 'html.parser')
                 buttons = soup.find_all('button')[1:]
                 for button in buttons:
-                    if button['disabled'] == 'disabled':
+                    if button['disabled'] != 'disabled':
                         available_slots.append(button['value'])
-
         driver.close()
         counter.end()
         return available_slots
     except Exception as e:
         print(e)
+
+print(Tempo_Rubato())
