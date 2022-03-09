@@ -74,5 +74,3 @@ def Tempo_Rubato():
             driver.quit()
         if counter:
             counter.end()
-
-print(Tempo_Rubato())
