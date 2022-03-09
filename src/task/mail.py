@@ -26,9 +26,8 @@ def SendMail(slot_dict):
         # initialize
         total_counter = common.TimeCounter("Send Mails")
         mongo = database.MongoDB()
-        properties = parser.ConfigParser()
-        properties.read('../config.ini')
-        logon_info = properties['MAIL']
+        config = common.Config()
+        logon_info = config.get("MAIL")
 
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.ehlo()

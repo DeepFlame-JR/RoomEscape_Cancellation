@@ -9,20 +9,8 @@ from pymongo.cursor import CursorType
 
 class MongoDB:
     def __init__(self):
-        properties = parser.ConfigParser()
-
-        # Check config.ini
-        folder = os.getcwd()
-        path = os.path.join(folder, 'src', 'config.ini')
-        if os.path.exists(path):
-            properties.read(path)
-        else:
-            properties.read(os.path.join(folder, '..', 'config.ini'))
-
-        if not 'MONGO' in properties.sections():
-            raise "can not find 'MONGO' in config.ini"
-
-        info = properties['MONGO']
+        config = common.Config()
+        info = config.get("MONGO")
         self.client = MongoClient("mongodb://{0}:{1}@{2}:27017/?authSource=admin"
                                   .format(info['user'], info['pw'], info['ip'])
                                   )
