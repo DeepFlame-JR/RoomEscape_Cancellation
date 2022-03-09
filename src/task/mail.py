@@ -21,6 +21,8 @@ def IsSent(cancel_time, send_info, now):
     return False
 
 def SendMail(slot_dict):
+    Log = common.Logger()
+
     # initialize
     total_counter = common.TimeCounter("Send Mails")
     mongo = database.MongoDB()
@@ -77,7 +79,7 @@ def SendMail(slot_dict):
                         "wnsfuf0121@naver.com",
                         msg.as_string()
                     )
-                    print('send mail to ' + user_info['email'] + '\nlength of send_list: ' + str(len(send_list)))
+                    Log.info('send mail to ' + user_info['email'] + '\nlength of send_list: ' + str(len(send_list)))
 
                 # Update cancellation DB
                 mongo.update_item_one(condition=user_info, update_value={'$set': {'send_info': send_info}},
@@ -86,8 +88,7 @@ def SendMail(slot_dict):
     server.quit()
     total_counter.end()
 
-
-# total_slots = dict()
-# total_slots["Decoder"] = dict()
-# total_slots["Decoder"]["Tempo Rubato"] = ['2022-08-08 18:00:00','2022-08-09 18:00:00']
-# SendMail(total_slots)
+total_slots = dict()
+total_slots["Decoder"] = dict()
+total_slots["Decoder"]["Tempo Rubato"] = ['2022-08-08 18:00:00','2022-08-09 18:00:00']
+SendMail(total_slots)

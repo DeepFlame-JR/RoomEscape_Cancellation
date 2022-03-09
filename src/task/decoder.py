@@ -15,7 +15,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 
 def Tempo_Rubato():
+    Log = common.Logger()
     try:
+        Log.info("Crawling Tempo Rubato")
         counter = common.TimeCounter("Tempo Rubato")
 
         options = webdriver.ChromeOptions()
@@ -31,7 +33,6 @@ def Tempo_Rubato():
 
         form_id = driver.find_element(By.CLASS_NAME, 'ab-booking-form').get_attribute('data-form_id')
         i = -1
-        # 최근 12개월
         while True:
             i += 1
             if i == 0:
@@ -64,4 +65,4 @@ def Tempo_Rubato():
         counter.end()
         return available_slots
     except Exception as e:
-        print(e)
+        Log.error(e)
