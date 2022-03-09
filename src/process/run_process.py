@@ -14,7 +14,7 @@ if __name__ == '__main__':
             total_slots["Decoder"]["Tempo Rubato"] = decoder.Tempo_Rubato()
             mail.SendMail(total_slots)
         except Exception as e:
-            Log.Error(e)
+            Log.error(e)
 
         Log.info('process end')
         time.sleep(600)

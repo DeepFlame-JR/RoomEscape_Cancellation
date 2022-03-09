@@ -22,73 +22,83 @@ def IsSent(cancel_time, send_info, now):
 
 def SendMail(slot_dict):
     Log = common.Logger()
+    try:
+        # initialize
+        total_counter = common.TimeCounter("Send Mails")
+        mongo = database.MongoDB()
+        properties = parser.ConfigParser()
+        properties.read('../config.ini')
+        logon_info = properties['MAIL']
 
-    # initialize
-    total_counter = common.TimeCounter("Send Mails")
-    mongo = database.MongoDB()
-    properties = parser.ConfigParser()
-    properties.read('../config.ini')
-    logon_info = properties['MAIL']
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.login(logon_info['id'], logon_info['pw'])
 
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.ehlo()
-    server.starttls()
-    server.login(logon_info['id'], logon_info['pw'])
+        # Send Mail
+        for cafe in slot_dict.keys():
+            for theme in slot_dict[cafe]:
+                counter = common.TimeCounter(cafe + " | " + theme)
+                cancel_times = slot_dict[cafe][theme]
+                if cancel_times == None or len(cancel_times) == 0:
+                    continue
 
-    # Send Mail
-    for cafe in slot_dict.keys():
-        for theme in slot_dict[cafe]:
-            counter = common.TimeCounter(cafe + " | " + theme)
-            cancel_times = slot_dict[cafe][theme]
-            if cancel_times == None or len(cancel_times) == 0:
-                continue
+                users = mongo.find_item(condition={'cafe':cafe, 'theme':theme},
+                                        db_name='roomdb', collection_name='user')
+                for user in users:
+                    user_info = mongo.find_item_one(condition={'email':user['email']},
+                                                    db_name='roomdb', collection_name='user')
+                    if 'send_info' in user_info.keys():
+                        send_info = copy.deepcopy(user_info['send_info'])
+                    else:
+                        send_info = dict()
 
-            users = mongo.find_item(condition={'cafe':cafe, 'theme':theme},
-                                    db_name='roomdb', collection_name='user')
-            for user in users:
-                user_info = mongo.find_item_one(condition={'email':user['email']},
-                                                db_name='roomdb', collection_name='user')
-                if 'send_info' in user_info.keys():
-                    send_info = copy.deepcopy(user_info['send_info'])
-                else:
-                    send_info = dict()
+                    now = datetime.datetime.now()
+                    # remove over 1 day
+                    remove_keys = []
+                    for k, v in send_info.items():
+                        if (now - v).days > 0:
+                            remove_keys.append(k)
+                    for remove_key in remove_keys:
+                        del send_info[remove_key]
 
-                # Check if the time was sent
-                send_list = []
-                now = datetime.datetime.now()
-                for cancel_time in cancel_times:
-                    if (datetime.datetime.strptime(cancel_time, '%Y-%m-%d %H:%M:%S')
-                            > now + relativedelta(months=user['untilMonth'])):
-                        continue
+                    # Check if the time was sent
+                    send_list = []
+                    for cancel_time in cancel_times:
+                        if (datetime.datetime.strptime(cancel_time, '%Y-%m-%d %H:%M:%S')
+                                > now + relativedelta(months=user['untilMonth'])):
+                            continue
 
-                    if not IsSent(cancel_time, send_info, now):
-                        send_list.append(cancel_time)
-                        send_info[cancel_time] = now
+                        if not IsSent(cancel_time, send_info, now):
+                            send_list.append(cancel_time)
+                            send_info[cancel_time] = now
 
-                # Send mail
-                if len(send_list) > 0:
-                    title = theme + " 빈자리 알림"
-                    content = cafe + " | " + theme + '의 빈 자리가 있습니다!\n\n' + \
-                              '아래 시간을 확인해주세요.\n' +\
-                              '\n'.join(send_list)
-                    msg = MIMEText(content)
-                    msg['Subject'] = title
+                    # Send mail
+                    if len(send_list) > 0:
+                        title = theme + " 빈자리 알림"
+                        content = cafe + " | " + theme + '의 빈 자리가 있습니다!\n\n' + \
+                                  '아래 시간을 확인해주세요.\n' +\
+                                  '\n'.join(send_list)
+                        msg = MIMEText(content)
+                        msg['Subject'] = title
 
-                    server.sendmail(
-                        "roomEscape@gmail.com",
-                        "wnsfuf0121@naver.com",
-                        msg.as_string()
-                    )
-                    Log.info('send mail to ' + user_info['email'] + '\nlength of send_list: ' + str(len(send_list)))
+                        server.sendmail(
+                            "roomEscape@gmail.com",
+                            "wnsfuf0121@naver.com",
+                            msg.as_string()
+                        )
+                        Log.info('send mail to ' + user_info['email'] + ' / length of send_list: ' + str(len(send_list)))
 
-                # Update cancellation DB
-                mongo.update_item_one(condition=user_info, update_value={'$set': {'send_info': send_info}},
-                                      db_name='roomdb', collection_name='user')
-            counter.end()
-    server.quit()
-    total_counter.end()
+                    # Update cancellation DB
+                    mongo.update_item_one(condition=user_info, update_value={'$set': {'send_info': send_info}},
+                                          db_name='roomdb', collection_name='user')
+                counter.end()
+        server.quit()
+        total_counter.end()
+    except Exception as e:
+        Log.error(e)
 
 total_slots = dict()
 total_slots["Decoder"] = dict()
-total_slots["Decoder"]["Tempo Rubato"] = ['2022-08-08 18:00:00','2022-08-09 18:00:00']
+total_slots["Decoder"]["Tempo Rubato"] = ['2022-08-08 18:00:00','2022-08-09 19:00:00']
 SendMail(total_slots)

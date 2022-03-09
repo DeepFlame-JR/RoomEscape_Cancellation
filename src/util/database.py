@@ -10,7 +10,18 @@ from pymongo.cursor import CursorType
 class MongoDB:
     def __init__(self):
         properties = parser.ConfigParser()
-        properties.read('../config.ini')
+
+        # Check config.ini
+        folder = os.getcwd()
+        path = os.path.join(folder, 'src', 'config.ini')
+        if os.path.exists(path):
+            properties.read(path)
+        else:
+            properties.read(os.path.join(folder, '..', 'config.ini'))
+
+        if not 'MONGO' in properties.sections():
+            raise "can not find 'MONGO' in config.ini"
+
         info = properties['MONGO']
         self.client = MongoClient("mongodb://{0}:{1}@{2}:27017/?authSource=admin"
                                   .format(info['user'], info['pw'], info['ip'])
@@ -52,6 +63,7 @@ class MongoDB:
         result = self.client[db_name][collection_name].find({"$text": {"$search": text}})
         return result
 
+# MongoDB()
 # mg.insert_item_one(
 #     data = {'email':'test'},
 #     db_name= 'roomdb',
