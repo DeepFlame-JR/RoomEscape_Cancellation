@@ -16,6 +16,7 @@ from bs4 import BeautifulSoup
 
 def Tempo_Rubato():
     Log = common.Logger()
+    driver, counter = None, None
     try:
         Log.info("Crawling Tempo Rubato")
         counter = common.TimeCounter("Tempo Rubato")
@@ -27,7 +28,7 @@ def Tempo_Rubato():
             options.add_argument('--disable-dev-shm-usage')
         driver = Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
 
-        available_slots = []
+        cancellation_list = []
         url = 'http://decoder.kr/?page_id=7082'
         driver.get(url)
 
@@ -39,12 +40,6 @@ def Tempo_Rubato():
                 re_url = 'http://decoder.kr/wp-admin/admin-ajax.php?action=ab_render_time&form_id=%s&cart_key=0' \
                          % form_id
             else:
-                try:
-                    next_button = driver.find_element(By.CLASS_NAME, 'picker__nav--next')
-                    next_button.click()
-                    time.sleep(1)
-                except:
-                    break
                 target_date = datetime.date.today() + relativedelta(months=i)
                 re_url = 'http://decoder.kr/wp-admin/admin-ajax.php?action=ab_render_time&form_id=%s&selected_date=%s&cart_key=0' \
                         % (form_id, str(datetime.date(target_date.year, target_date.month, 1)))
@@ -59,10 +54,25 @@ def Tempo_Rubato():
                 soup = BeautifulSoup(day, 'html.parser')
                 buttons = soup.find_all('button')[1:]
                 for button in buttons:
-                    if button['disabled'] != 'disabled':
-                        available_slots.append(button['value'])
-        driver.close()
-        counter.end()
-        return available_slots
+                    print(button['class'])
+                    if 'booked' not in button['class']:
+                        cancellation_list.append(button['value'])
+
+            try:
+                next_button = driver.find_element(By.CLASS_NAME, 'picker__nav--next')
+                next_button.click()
+                time.sleep(1)
+            except:
+                break
+
+        return cancellation_list
+
     except Exception as e:
         Log.error(e)
+    finally:
+        if driver:
+            driver.quit()
+        if counter:
+            counter.end()
+
+print(Tempo_Rubato())
