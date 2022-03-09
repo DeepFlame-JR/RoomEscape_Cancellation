@@ -30,15 +30,20 @@ def Tempo_Rubato():
         driver.get(url)
 
         form_id = driver.find_element(By.CLASS_NAME, 'ab-booking-form').get_attribute('data-form_id')
+        i = -1
         # 최근 12개월
-        for i in range(12) :
+        while True:
+            i += 1
             if i == 0:
                 re_url = 'http://decoder.kr/wp-admin/admin-ajax.php?action=ab_render_time&form_id=%s&cart_key=0' \
                          % form_id
             else:
-                next_button = driver.find_element(By.CLASS_NAME, 'picker__nav--next')
-                next_button.click()
-                time.sleep(1)
+                try:
+                    next_button = driver.find_element(By.CLASS_NAME, 'picker__nav--next')
+                    next_button.click()
+                    time.sleep(1)
+                except:
+                    break
                 target_date = datetime.date.today() + relativedelta(months=i)
                 re_url = 'http://decoder.kr/wp-admin/admin-ajax.php?action=ab_render_time&form_id=%s&selected_date=%s&cart_key=0' \
                         % (form_id, str(datetime.date(target_date.year, target_date.month, 1)))
@@ -60,5 +65,3 @@ def Tempo_Rubato():
         return available_slots
     except Exception as e:
         print(e)
-
-print(Tempo_Rubato())

@@ -1,3 +1,4 @@
+import datetime
 import sys, os
 sys.path.append((os.path.dirname(__file__)))
 import common
@@ -16,15 +17,11 @@ class MongoDB:
                                   )
 
     def insert_item_one(self, data, db_name=None, collection_name=None):
-        counter = common.TimeCounter('Insert %s in MongoDB' % collection_name)
         result = self.client[db_name][collection_name].insert_one(data).inserted_id
-        counter.end()
         return result
 
     def insert_item_many(self, datas, db_name=None, collection_name=None):
-        counter = common.TimeCounter('Insert %s in MongoDB' % collection_name)
         result = self.client[db_name][collection_name].insert_many(datas).inserted_ids
-        counter.end()
         return result
 
     def find_item_one(self, condition=None, db_name=None, collection_name=None):
@@ -44,7 +41,7 @@ class MongoDB:
         return result
 
     def update_item_one(self, condition=None, update_value=None, db_name=None, collection_name=None):
-        result = self.client[db_name][collection_name].update_one(filter=condition, update=update_value)
+        result = self.client[db_name][collection_name].update_one(filter=condition, update=update_value, upsert=True)
         return result
 
     def update_item_many(self, condition=None, update_value=None, db_name=None, collection_name=None):
@@ -55,8 +52,6 @@ class MongoDB:
         result = self.client[db_name][collection_name].find({"$text": {"$search": text}})
         return result
 
-
-# mg = MongoDB()
 # mg.insert_item_one(
 #     data = {'email':'test'},
 #     db_name= 'roomdb',
