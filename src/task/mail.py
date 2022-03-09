@@ -4,7 +4,6 @@ from util import common, database
 
 import datetime, copy
 from dateutil.relativedelta import relativedelta
-import configparser as parser
 import smtplib
 from email.mime.text import MIMEText
 
@@ -97,7 +96,7 @@ def SendMail(slot_dict):
     except Exception as e:
         Log.error(e)
 
-total_slots = dict()
-total_slots["Decoder"] = dict()
-total_slots["Decoder"]["Tempo Rubato"] = ['2022-08-08 18:00:00','2022-08-09 19:00:00']
-SendMail(total_slots)
+# total_slots = dict()
+# total_slots["Decoder"] = dict()
+# total_slots["Decoder"]["Tempo Rubato"] = ['2022-08-08 18:00:00','2022-08-09 19:00:00']
+# SendMail(total_slots)
