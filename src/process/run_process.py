@@ -12,6 +12,7 @@ if __name__ == '__main__':
             total_slots = dict()
             total_slots["Decoder"] = dict()
             total_slots["Decoder"]["Tempo Rubato"] = decoder.Tempo_Rubato()
+            # total_slots["Decoder"]["Tempo Rubato"] = ['2022-05-02 16:00:00']
             mail.SendMail(total_slots)
         except Exception as e:
             Log.error(e)

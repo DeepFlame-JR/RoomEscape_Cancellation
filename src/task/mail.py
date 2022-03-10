@@ -44,10 +44,8 @@ def SendMail(slot_dict):
                 users = mongo.find_item(condition={'cafe':cafe, 'theme':theme},
                                         db_name='roomdb', collection_name='user')
                 for user in users:
-                    user_info = mongo.find_item_one(condition={'email':user['email']},
-                                                    db_name='roomdb', collection_name='user')
-                    if 'send_info' in user_info.keys():
-                        send_info = copy.deepcopy(user_info['send_info'])
+                    if 'send_info' in user.keys():
+                        send_info = copy.deepcopy(user['send_info'])
                     else:
                         send_info = dict()
 
@@ -85,18 +83,13 @@ def SendMail(slot_dict):
                             "wnsfuf0121@naver.com",
                             msg.as_string()
                         )
-                        Log.info('send mail to ' + user_info['email'] + ' / length of send_list: ' + str(len(send_list)))
+                        Log.info('send mail to ' + user['email'] + ' / length of send_list: ' + str(len(send_list)))
 
                     # Update cancellation DB
-                    mongo.update_item_one(condition=user_info, update_value={'$set': {'send_info': send_info}},
+                    mongo.update_item_one(condition=user, update_value={'$set': {'send_info': send_info}},
                                           db_name='roomdb', collection_name='user')
                 counter.end()
         server.quit()
         total_counter.end()
     except Exception as e:
         Log.error(e)
-
-# total_slots = dict()
-# total_slots["Decoder"] = dict()
-# total_slots["Decoder"]["Tempo Rubato"] = ['2022-08-08 18:00:00','2022-08-09 19:00:00']
-# SendMail(total_slots)

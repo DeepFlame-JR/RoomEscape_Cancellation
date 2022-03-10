@@ -54,7 +54,6 @@ def Tempo_Rubato():
                 soup = BeautifulSoup(day, 'html.parser')
                 buttons = soup.find_all('button')[1:]
                 for button in buttons:
-                    print(button['class'])
                     if 'booked' not in button['class']:
                         cancellation_list.append(button['value'])
 
