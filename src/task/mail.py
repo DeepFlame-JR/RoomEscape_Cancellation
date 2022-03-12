@@ -73,7 +73,7 @@ def SendMail(slot_dict):
                     # Send mail
                     if len(send_list) > 0:
                         title = theme + " 빈자리 알림"
-                        content = 'cafe' + " | " + 'theme' + '의 빈 자리가 있습니다! 🙋‍\n\n' + \
+                        content = cafe + " | " + theme + '의 빈 자리가 있습니다! 🙋‍\n\n' + \
                                   '아래 시간을 확인해주세요.\n' + \
                                   '\n'.join(send_list) + \
                                   '\n\n예약 URL: http://decoder.kr/?page_id=7082'
