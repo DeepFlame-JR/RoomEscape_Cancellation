@@ -55,6 +55,7 @@ def SendMail(slot_dict):
                     for k, v in send_info.items():
                         if (now - v).days > 0:
                             remove_keys.append(k)
+                    Log.info("removed: " + str(remove_keys))
                     for remove_key in remove_keys:
                         del send_info[remove_key]
 
@@ -72,15 +73,16 @@ def SendMail(slot_dict):
                     # Send mail
                     if len(send_list) > 0:
                         title = theme + " 빈자리 알림"
-                        content = cafe + " | " + theme + '의 빈 자리가 있습니다!\n\n' + \
-                                  '아래 시간을 확인해주세요.\n' +\
-                                  '\n'.join(send_list)
+                        content = 'cafe' + " | " + 'theme' + '의 빈 자리가 있습니다! 🙋‍\n\n' + \
+                                  '아래 시간을 확인해주세요.\n' + \
+                                  '\n'.join(send_list) + \
+                                  '\n\n예약 URL: http://decoder.kr/?page_id=7082'
                         msg = MIMEText(content)
                         msg['Subject'] = title
 
                         server.sendmail(
                             "roomEscape@gmail.com",
-                            "wnsfuf0121@naver.com",
+                            user['email'],
                             msg.as_string()
                         )
                         Log.info('send mail to ' + user['email'] + ' / length of send_list: ' + str(len(send_list)))
