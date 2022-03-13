@@ -1,5 +1,8 @@
-import datetime
-import sys, os, time
+import sys, os, platform, time, datetime
+if 'Windows' not in platform.platform():
+    os.environ['TZ'] = 'Asia/Seoul'
+    time.tzset()
+
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from task import decoder, notice
 from util import common
@@ -14,7 +17,6 @@ if __name__ == '__main__':
     Today, Today_cancellation_slots = None, None
     Log = common.Logger()
     Mail = common.Mail()
-
     while True:
         Log.info('---------- process start! ----------')
         counter = common.TimeCounter("Process Time")
@@ -28,8 +30,8 @@ if __name__ == '__main__':
 
             # 데이터 크롤링
             cancellation_slots = Get_Dictionary()
-            # data = decoder.Tempo_Rubato()
-            data = ['2022-05-04 16:01:00']
+            data = decoder.Tempo_Rubato()
+            # data = ['2022-05-04 16:01:00']
             cancellation_slots["Decoder"]["Tempo Rubato"].extend(data)
             Today_cancellation_slots["Decoder"]["Tempo Rubato"].extend(data)
 
@@ -39,5 +41,5 @@ if __name__ == '__main__':
             Log.error(e)
 
         counter.end()
-        Log.info('---------- process end ----------')
+        Log.info('---------- process end ----------\n\n\n')
         time.sleep(600)

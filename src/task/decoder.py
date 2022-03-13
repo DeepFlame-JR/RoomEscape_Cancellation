@@ -1,12 +1,12 @@
-import sys, os
-import time
+import sys, os, platform, time, datetime
+if 'Windows' not in platform.platform():
+    os.environ['TZ'] = 'Asia/Seoul'
+    time.tzset()
+
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from util import common
 
-import datetime, platform
 from dateutil.relativedelta import relativedelta
-
-import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -17,6 +17,7 @@ from bs4 import BeautifulSoup
 def Tempo_Rubato():
     Log = common.Logger()
     driver, counter = None, None
+    i = -1
     try:
         Log.info("Crawling Tempo Rubato")
         counter = common.TimeCounter("Tempo Rubato")
@@ -24,8 +25,6 @@ def Tempo_Rubato():
         options = webdriver.ChromeOptions()
         if 'Windows' not in platform.platform():
             options.add_argument('--headless')
-            options.add_argument('--no-sandbox')
-            options.add_argument('--disable-dev-shm-usage')
         driver = Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
 
         cancellation_list = []
@@ -33,7 +32,6 @@ def Tempo_Rubato():
         driver.get(url)
 
         form_id = driver.find_element(By.CLASS_NAME, 'ab-booking-form').get_attribute('data-form_id')
-        i = -1
         while True:
             i += 1
             if i == 0:
@@ -60,15 +58,16 @@ def Tempo_Rubato():
             try:
                 next_button = driver.find_element(By.CLASS_NAME, 'picker__nav--next')
                 next_button.click()
-                time.sleep(1)
+                time.sleep(2)
             except:
+                Log.info("picker__nav--next is not existed")
                 break
-
         return cancellation_list
 
     except Exception as e:
         Log.error(e)
     finally:
+        Log.info("Month finish in " + str(i) + "month.")
         if driver:
             driver.quit()
         if counter:

@@ -1,9 +1,14 @@
-import sys, os
+import sys, os, platform, time
+if 'Windows' not in platform.platform():
+    os.environ['TZ'] = 'Asia/Seoul'
+    time.tzset()
+
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from util import common, database
 
-import datetime, copy, platform
+import datetime, copy
 from dateutil.relativedelta import relativedelta
+from pytz import timezone
 
 '''
 아래 조건에 해당하는 경우, 메일을 전송한다.
@@ -58,7 +63,7 @@ def SendNotice(cancellation_slots):
                     # Check if the time was sent
                     send_list = []
                     for cancel_time in cancel_times:
-                        if (datetime.datetime.strptime(cancel_time, '%Y-%m-%d %H:%M:%S')
+                        if (datetime.datetime.now().strptime(cancel_time, '%Y-%m-%d %H:%M:%S')
                                 > now + relativedelta(months=user['untilMonth'])):
                             continue
 
@@ -82,8 +87,3 @@ def SendNotice(cancellation_slots):
         total_counter.end()
     except Exception as e:
         Log.error(e)
-
-# total_slots = dict()
-# total_slots["Decoder"] = dict()
-# total_slots["Decoder"]["Tempo Rubato"] = ['2022-05-02 16:00:00']
-# SendNotice(total_slots)

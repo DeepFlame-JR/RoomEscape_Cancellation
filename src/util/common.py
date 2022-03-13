@@ -1,6 +1,9 @@
-import time
+import os, platform, time
+if 'Windows' not in platform.platform():
+    os.environ['TZ'] = 'Asia/Seoul'
+    time.tzset()
+
 import logging
-import os
 import configparser as parser
 import smtplib
 from email.mime.text import MIMEText
@@ -20,7 +23,7 @@ class Logger:
 
         if len(self.logger.handlers) == 0:
             # StreamHandler
-            formatter = logging.Formatter(u'%(asctime)s [%(levelname)s] %(message)s')
+            formatter = logging.Formatter(u'%(asctime)s [%(levelname)s] %(message)s', '%Y-%m-%dT%H:%M:%SZ')
             stream_handler = logging.StreamHandler()
             stream_handler.setFormatter(formatter)
 
