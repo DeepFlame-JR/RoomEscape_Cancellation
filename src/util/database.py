@@ -1,9 +1,6 @@
-import datetime
 import sys, os
 sys.path.append((os.path.dirname(__file__)))
 import common
-import psycopg2
-import configparser as parser
 from pymongo import MongoClient
 from pymongo.cursor import CursorType
 
@@ -53,16 +50,3 @@ class MongoDB:
     def text_search(self, text=None, db_name=None, collection_name=None):
         result = self.client[db_name][collection_name].find({"$text": {"$search": text}})
         return result
-
-# MongoDB()
-# mg.insert_item_one(
-#     data = {'email':'test'},
-#     db_name= 'roomdb',
-#     collection_name= 'user'
-# )
-#
-# mg.delete_item_many(
-#     condition = {'email':'test'},
-#     db_name= 'roomdb',
-#     collection_name= 'user'
-# )

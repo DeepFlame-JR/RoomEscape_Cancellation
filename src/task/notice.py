@@ -87,3 +87,8 @@ def SendNotice(cancellation_slots):
         total_counter.end()
     except Exception as e:
         Log.error(e)
+
+# total_slots = dict()
+# total_slots["Decoder"] = dict()
+# total_slots["Decoder"]["Tempo Rubato"] = ['2022-05-02 16:00:00']
+# SendNotice(total_slots)

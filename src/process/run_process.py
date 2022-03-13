@@ -4,7 +4,7 @@ if 'Windows' not in platform.platform():
     time.tzset()
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from task import decoder, notice
+from task import decoder, notice, log_data
 from util import common
 
 def Get_Dictionary():
@@ -34,8 +34,8 @@ if __name__ == '__main__':
             # data = ['2022-05-04 16:01:00']
             cancellation_slots["Decoder"]["Tempo Rubato"].extend(data)
             Today_cancellation_slots["Decoder"]["Tempo Rubato"].extend(data)
-
             Log.info("Total Slots: " + str(cancellation_slots))
+            log_data.set(data)
             notice.SendNotice(cancellation_slots)
         except Exception as e:
             Log.error(e)

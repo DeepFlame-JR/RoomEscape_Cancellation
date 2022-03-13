@@ -23,7 +23,7 @@ class Logger:
 
         if len(self.logger.handlers) == 0:
             # StreamHandler
-            formatter = logging.Formatter(u'%(asctime)s [%(levelname)s] %(message)s', '%Y-%m-%dT%H:%M:%SZ')
+            formatter = logging.Formatter(u'%(asctime)s [%(levelname)s] %(message)s')
             stream_handler = logging.StreamHandler()
             stream_handler.setFormatter(formatter)
 
