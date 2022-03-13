@@ -2,6 +2,8 @@ import time
 import logging
 import os
 import configparser as parser
+import smtplib
+from email.mime.text import MIMEText
 
 class TimeCounter:
     def __init__(self, title):
@@ -47,9 +49,27 @@ class Config:
             raise "can not find {0} in config.ini".format(section)
         return self.properties[section]
 
-# log = Logger()
-# log = Logger()
-# log = Logger()
-#
-# log.info('test')
-# log.error('test')
+class Mail:
+    def __init__(self):
+        config = Config()
+        self.logon_info = config.get("MAIL")
+        self.Log = Logger()
+
+        self.server = smtplib.SMTP('smtp.gmail.com', 587)
+        self.server.ehlo()
+        self.server.starttls()
+        self.server.login(self.logon_info['id'], self.logon_info['pw'])
+
+    def __del__(self):
+        self.server.quit()
+
+    def send(self, title, content, sendTo):
+        msg = MIMEText(content)
+        msg['Subject'] = title
+
+        self.server.sendmail(
+            "roomEscape@gmail.com",
+            sendTo,
+            msg.as_string()
+        )
+        self.Log.info('send mail to ' + sendTo)
