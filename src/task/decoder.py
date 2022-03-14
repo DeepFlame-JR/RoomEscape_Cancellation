@@ -25,6 +25,9 @@ def Tempo_Rubato():
         options = webdriver.ChromeOptions()
         if 'Windows' not in platform.platform():
             options.add_argument('--headless')
+            options.add_argument('--no-sandbox')
+            options.add_argument("--single-process")
+            options.add_argument("--disable-dev-shm-usage")
         driver = Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
 
         cancellation_list = []
