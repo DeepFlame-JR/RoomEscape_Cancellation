@@ -13,6 +13,17 @@ def Get_Dictionary():
     data["Decoder"]["Tempo Rubato"] = []
     return data
 
+def Get_Summary(dictionary):
+    msg = ""
+    for cafe in dictionary:
+        for theme in dictionary[cafe]:
+            msg += cafe + " | " + theme + " 취소 자리 현황\n"
+            print(dictionary[cafe][theme])
+            li = list(set(dictionary[cafe][theme]))
+            msg += '\n'.join(li) + '\n\n'
+    return msg
+
+
 if __name__ == '__main__':
     Today, Today_cancellation_slots = None, None
     Log = common.Logger()
@@ -24,7 +35,8 @@ if __name__ == '__main__':
             if not Today or Today != datetime.date.today():
                 if Today:
                     mail = common.Mail()
-                    mail.send("진행 상황", str(Today) + '\n' + str(Today_cancellation_slots), "wnsfuf0121@naver.com")
+                    today_list = Today_cancellation_slots
+                    mail.send("진행 상황", Get_Summary(Today_cancellation_slots), "wnsfuf0121@naver.com")
                 Today_cancellation_slots = Get_Dictionary()
                 Today = datetime.date.today()
 
@@ -36,7 +48,7 @@ if __name__ == '__main__':
             cancellation_slots = Get_Dictionary()
             cancellation_slots["Decoder"]["Tempo Rubato"].extend(data)
             Today_cancellation_slots["Decoder"]["Tempo Rubato"].extend(data)
-            Log.info("Total Slots: " + str(cancellation_slots))
+            Log.info(Get_Summary(cancellation_slots))
 
             # 로그에 기록하고, 메일 보내기
             log_data.set(data)
