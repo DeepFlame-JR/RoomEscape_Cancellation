@@ -18,9 +18,9 @@ def Get_Summary(dictionary):
     for cafe in dictionary:
         for theme in dictionary[cafe]:
             msg += cafe + " | " + theme + " 취소 자리 현황\n"
-            print(dictionary[cafe][theme])
             li = list(set(dictionary[cafe][theme]))
-            msg += '\n'.join(li) + '\n\n'
+            if len(li) > 0:
+                msg += '\n'.join(li) + '\n\n'
     return msg
 
 
