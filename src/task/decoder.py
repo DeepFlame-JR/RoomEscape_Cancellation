@@ -31,7 +31,7 @@ def Tempo_Rubato():
         driver = Chrome(service=Service(ChromeDriverManager().install()), chrome_options=options)
 
         cancellation_list = []
-        url = 'http://decoder.kr/?page_id=7082'
+        url = 'http://decoder.kr/book-rubato/'
         driver.get(url)
 
         form_id = driver.find_element(By.CLASS_NAME, 'ab-booking-form').get_attribute('data-form_id')

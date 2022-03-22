@@ -77,7 +77,7 @@ def SendNotice(cancellation_slots):
                         content = cafe + " | " + theme + '의 빈 자리가 있습니다! 🙋‍\n\n' + \
                                   '아래 시간을 확인해주세요.\n' + \
                                   '\n'.join(send_list) + \
-                                  '\n\n예약 URL: http://decoder.kr/?page_id=7082'
+                                  '\n\n예약 URL: http://decoder.kr/book-rubato/'
                         mail.send(title, content, user['email'])
 
                     # Update cancellation DB
