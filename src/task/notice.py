@@ -8,7 +8,6 @@ from util import common, database
 
 import datetime, copy
 from dateutil.relativedelta import relativedelta
-from pytz import timezone
 
 '''
 아래 조건에 해당하는 경우, 메일을 전송한다.

@@ -4,8 +4,9 @@ if 'Windows' not in platform.platform():
     time.tzset()
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from task import decoder, notice, log_data
+from task import decoder, notice, log
 from util import common
+import numpy as np
 
 def Get_Dictionary():
     data = dict()
@@ -22,7 +23,6 @@ def Get_Summary(dictionary):
             if len(li) > 0:
                 msg += '\n'.join(li) + '\n\n'
     return msg
-
 
 if __name__ == '__main__':
     Today, Today_cancellation_slots = None, None
@@ -41,7 +41,7 @@ if __name__ == '__main__':
                 Today = datetime.date.today()
 
             # 데이터 크롤링
-            data = decoder.Tempo_Rubato()
+            data = decoder.Tempo_Rubato_no_requests()
             # data = ['2022-05-04 16:01:00']
 
             # 자료 세팅
@@ -51,11 +51,11 @@ if __name__ == '__main__':
             Log.info(Get_Summary(cancellation_slots))
 
             # 로그에 기록하고, 메일 보내기
-            log_data.set(data)
+            log.set(data)
             notice.SendNotice(cancellation_slots)
         except Exception as e:
             Log.error(e)
 
         counter.end()
         Log.info('---------- process end ----------\n\n\n')
-        time.sleep(600)
+        time.sleep(1200+int(np.random.normal()*10))
