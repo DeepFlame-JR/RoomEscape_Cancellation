@@ -10,8 +10,12 @@
 아래 주소에서 이메일을 등록하시면 ```빈 자리 알림```을 받으실 수 있습니다! 😀      
 http://15.164.231.156:3001/   
    
-<img width="40%" src="https://user-images.githubusercontent.com/40620421/157457764-4f39e37f-9ee8-48b2-8167-634c628c3ebf.png"/>
-
+<img width="40%" src="https://user-images.githubusercontent.com/40620421/157457764-4f39e37f-9ee8-48b2-8167-634c628c3ebf.png"/>   
+   
+🙋‍♂️   
+정책 변경에 따라 최근 몇 달간의 알람 수 범위가 12개월 → 6개월로 변경됩니다.   
+기존에 선택한 값이 6개월보다 길다면 자동으로 6개월로 변경됩니다.   
+   
 ---
 
 ## Solution
