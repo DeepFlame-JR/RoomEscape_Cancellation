@@ -41,7 +41,7 @@ if __name__ == '__main__':
                 Today = datetime.date.today()
 
             # 데이터 크롤링
-            data = decoder.Tempo_Rubato_no_requests()
+            data = decoder.Tempo_Rubato()
             # data = ['2022-05-04 16:01:00']
 
             # 자료 세팅
@@ -58,4 +58,4 @@ if __name__ == '__main__':
 
         counter.end()
         Log.info('---------- process end ----------\n\n\n')
-        time.sleep(1200+int(np.random.normal()*10))
+        time.sleep(1800+int(np.random.normal()*10))

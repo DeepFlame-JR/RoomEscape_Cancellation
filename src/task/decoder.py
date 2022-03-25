@@ -37,6 +37,8 @@ def Tempo_Rubato():
         form_id = driver.find_element(By.CLASS_NAME, 'ab-booking-form').get_attribute('data-form_id')
         while True:
             i += 1
+            if i == 7: break
+
             if i == 0:
                 re_url = 'http://decoder.kr/wp-admin/admin-ajax.php?action=ab_render_time&form_id=%s&cart_key=0' \
                          % form_id
