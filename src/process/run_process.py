@@ -58,4 +58,4 @@ if __name__ == '__main__':
 
         counter.end()
         Log.info('---------- process end ----------\n\n\n')
-        time.sleep(1800+int(np.random.normal()*10))
+        time.sleep(1800+int(np.random.normal()*10)) # 30분+a
