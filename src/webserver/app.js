@@ -1,9 +1,6 @@
 console.log('Server-side code running');
 
 // require packages
-var util= require('util');
-const utf8Encoder = new util.TextEncoder();
-const utf8Decoder = new util.TextDecoder("utf-8", { ignoreBOM: true });
 const express = require("express");
 const path = require("path");
 const sf = require("sf");
